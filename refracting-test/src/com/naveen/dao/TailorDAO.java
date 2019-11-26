@@ -693,32 +693,11 @@ public class TailorDAO {
 					String sql1 = "";
 					
 					// 4 because smid is also included
-					if (columnCount == 5) {
-						sql1 = "select " + gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2) + ", "
-								+ gc.rsmd.getColumnName(3)
-								+ ",  sum(qty) from tailor_report1 group by "
-								+ gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2) + ", "
-								+ gc.rsmd.getColumnName(3);
-
-					} else if (columnCount == 4) {
-						sql1 = "select " + gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2)
-								+ ",  sum(qty) from tailor_report1 group by "
-								+ gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2);
-					} else if (columnCount == 6) {
-						sql1 = "select " + gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2) + ", "
-								+ gc.rsmd.getColumnName(3) + ", "
-								+ gc.rsmd.getColumnName(4)
-								+ ",  sum(qty) from tailor_report1 group by "
-								+ gc.rsmd.getColumnName(1) + ", "
-								+ gc.rsmd.getColumnName(2) + ", "
-								+ gc.rsmd.getColumnName(3) + ", "
-								+ gc.rsmd.getColumnName(4);
-
+					if (columnCount > 3 && columnCount < 7) {
+						sql1 = "select ";
+						sql1 = sql1 + getColumnNamedString(gc, columnCount);
+						sql1 = sql1 + " sum(qty) from tailor_report1 group by ";
+						sql1 = sql1 + getColumnNamedString(gc, columnCount);
 					} else {
 						return null;
 					}
@@ -732,21 +711,8 @@ public class TailorDAO {
 					while (gc.rs2.next()) {
 						ArrayList<String> tempList = new ArrayList<String>();
 
-						if (columnCount == 5) {
-							tempList.add(gc.rs2.getString(1));
-							tempList.add(gc.rs2.getString(2));
-							tempList.add(gc.rs2.getString(3));
-							tempList.add(gc.rs2.getString(4));
-						} else if (columnCount == 4) {
-							tempList.add(gc.rs2.getString(1));
-							tempList.add(gc.rs2.getString(2));
-							tempList.add(gc.rs2.getString(3));
-						} else if (columnCount == 6) {
-							tempList.add(gc.rs2.getString(1));
-							tempList.add(gc.rs2.getString(2));
-							tempList.add(gc.rs2.getString(3));
-							tempList.add(gc.rs2.getString(4));
-							tempList.add(gc.rs2.getString(5));
+						if (columnCount > 3 && columnCount < 7 ) {
+							tempList = addToList(gc, columnCount);
 						}
 
 						myList.add(tempList);
@@ -776,7 +742,7 @@ public class TailorDAO {
 						String sql1 = "";
 						// // naveen start 2nd feb ////
 						// 4 because smid is also included
-						if (columnCount != 0) {
+						if (columnCount > 3 && columnCount < 7) {
 							sql1 = "select ";
 							sql1 = sql1 + getColumnNamedString(gc, columnCount);
 							sql1 = sql1 + " sum(qty) from tailor_report1 group by ";
