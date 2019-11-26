@@ -691,6 +691,7 @@ public class TailorDAO {
 
 					// // naveen start 4th feb 2015 ////
 					String sql1 = "";
+					
 					// 4 because smid is also included
 					if (columnCount == 5) {
 						sql1 = "select " + gc.rsmd.getColumnName(1) + ", "
@@ -772,41 +773,14 @@ public class TailorDAO {
 						gc.rsmd = gc.rs1.getMetaData();
 
 						int columnCount = gc.rsmd.getColumnCount();
-
-						// // naveen start 2nd feb ////
-
 						String sql1 = "";
+						// // naveen start 2nd feb ////
 						// 4 because smid is also included
-						if (columnCount == 4) {
-							// for two measurment uniform
-							// System.out.println("col count = 4");
-							sql1 = "select "
-									+ gc.rsmd.getColumnName(1)
-									+ ", "
-									+ gc.rsmd.getColumnName(2)
-									+ ",  sum(qty) from tailor_report1 group by "
-									+ gc.rsmd.getColumnName(1) + ", "
-									+ gc.rsmd.getColumnName(2);
-						} else if (columnCount == 3) {
-							// System.out.println("col count = 3");
-							// for one measurement uniform
-							sql1 = "select "
-									+ gc.rsmd.getColumnName(1)
-									+ ",  sum(qty) from tailor_report1 group by "
-									+ gc.rsmd.getColumnName(1);
-						} else if (columnCount == 5) {
-							// System.out.println("col colunt = 5");
-							// for three measurement uniform
-							sql1 = "select "
-									+ gc.rsmd.getColumnName(1)
-									+ ", "
-									+ gc.rsmd.getColumnName(2)
-									+ ", "
-									+ gc.rsmd.getColumnName(3)
-									+ ",  sum(qty) from tailor_report1 group by "
-									+ gc.rsmd.getColumnName(1) + ", "
-									+ gc.rsmd.getColumnName(2) + ", "
-									+ gc.rsmd.getColumnName(3);
+						if (columnCount != 0) {
+							sql1 = "select ";
+							sql1 = sql1 + getColumnNamedString(gc, columnCount);
+							sql1 = sql1 + " sum(qty) from tailor_report1 group by ";
+							sql1 = sql1 + getColumnNamedString(gc, columnCount);
 						} else {
 							// System.out.println("else return null no color");
 							return null;
@@ -891,9 +865,13 @@ public class TailorDAO {
 		return tempList;
 	}
 	
-	
-	
-	
+	String getColumnNamedString(GetConnection gc, int columnCount) throws SQLException {
+		String str = "";
+		for(int i = 1; i < columnCount - 1; i++) {
+			str = str + gc.rsmd.getColumnName(i) + ",";
+		}
+		return str;
+	}
 	
 	
 	
