@@ -817,27 +817,13 @@ public class TailorDAO {
 						gc.ps2 = GetConnection.getMySQLConnection()
 								.prepareStatement(sql1);
 						gc.rs2 = gc.ps2.executeQuery();
+						
+						
 
 						while (gc.rs2.next()) {
-
+							
 							ArrayList<String> tempList = new ArrayList<String>();
-
-							if (columnCount == 4) {
-								// for two measurements
-								tempList.add(gc.rs2.getString(1));
-								tempList.add(gc.rs2.getString(2));
-								tempList.add(gc.rs2.getString(3));
-							} else if (columnCount == 3) {
-								// for one measurement
-								tempList.add(gc.rs2.getString(1));
-								tempList.add(gc.rs2.getString(2));
-							} else if (columnCount == 5) {
-								// for three measurement
-								tempList.add(gc.rs2.getString(1));
-								tempList.add(gc.rs2.getString(2));
-								tempList.add(gc.rs2.getString(3));
-								tempList.add(gc.rs2.getString(4));
-							}
+							tempList = addToList(gc, columnCount);
 
 							myList.add(tempList);
 						}
@@ -895,7 +881,15 @@ public class TailorDAO {
 
 	}
 
-	
+	ArrayList<String> addToList(GetConnection gc ,int columnCount) throws SQLException {
+		ArrayList<String> tempList = new ArrayList<String>();
+		
+		for(int i = 0; i < columnCount; i++) {
+			tempList.add(gc.rs2.getString(i));
+		}
+		
+		return tempList;
+	}
 	
 	
 	
